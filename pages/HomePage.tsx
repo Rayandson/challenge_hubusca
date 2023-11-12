@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Text,
-  Image,
   TouchableOpacity,
   TextInput,
   Keyboard,
@@ -15,6 +13,9 @@ import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList, UserData } from "../types";
 import { getRecentSearches, saveRecentSearch } from "../utils/storageUtil";
+import RecentSearchesSection from "../components/RecentSearchesSection";
+import UserCard from "../components/UserCard";
+import SearchView from "../components/SearchView";
 
 type HomeScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -115,82 +116,45 @@ export default function HomePage({ navigation }: Props) {
     fetchUserData();
   };
 
+  const generateResultContent = () => {
+    if (isLoading) {
+      return <ActivityIndicator size="large" color="#333" />;
+    } else if (error) {
+      return <ErrorMessage>{error}</ErrorMessage>;
+    } else if (userData) {
+      return (
+        <UserCard
+          navigation={navigation}
+          userData={userData}
+          setUsername={setUsername}
+          setUserData={setUserData}
+        />
+      );
+    } else {
+      return (
+        <TouchableOpacity onPress={() => inputRef.current?.focus()}>
+          <FindUsersText>
+            Encontre usuários do GitHub{" "}
+            <Icon name="search" size={15} color="#000" />
+          </FindUsersText>
+        </TouchableOpacity>
+      );
+    }
+  };
+  
   return (
     <ScrollView keyboardShouldPersistTaps="handled" onScroll={Keyboard.dismiss}>
       <Container>
         <Title>HUBusca</Title>
-        <SearchView>
-          <Input
-            ref={inputRef}
-            placeholder="Pesquisar usuário..."
-            placeholderTextColor="#999"
-            value={username}
-            onChangeText={(text: string) => {
-              setUsername(text);
-              setUserData(null);
-            }}
-          />
-          <SearchButton onPress={handleSearch}>
-            <Icon name="search" size={22} color="#FFF" />
-          </SearchButton>
-        </SearchView>
-        <ResultView>
-            {isLoading ? (
-              <ActivityIndicator size="large" color="#333" />
-            ) : error ? (
-              <ErrorMessage>{error}</ErrorMessage>
-            ) : userData ? (
-              <UserResult
-                onPress={() => {
-                  setUsername("");
-                  navigation.navigate("UserPage", {
-                    userData: { ...userData },
-                  });
-                  setUserData(null);
-                }}
-              >
-                <Image
-                  source={{ uri: userData.avatar_url }}
-                  style={{ width: 130, height: 130, borderRadius: 65 }}
-                />
-                <UserInfo>
-                  <UserInfoText>Name: {userData.name}</UserInfoText>
-                  <UserInfoText>Login: {userData.login}</UserInfoText>
-                  <UserInfoText>Location: {userData.location}</UserInfoText>
-                </UserInfo>
-              </UserResult>
-            ) : (
-              <TouchableOpacity onPress={() => inputRef.current?.focus()}>
-                <FindUsersText>
-                  Encontre usuários do GitHub{" "}
-                  <Icon name="search" size={15} color="#000" />
-                </FindUsersText>
-              </TouchableOpacity>
-            )}
-        </ResultView>
-        <Title>Pesquisas recentes</Title>
-        <RecentSearchesContainer>
-          {recentSearches.map((user: UserData, index) => {
-            return (
-              <UserResult
-                key={index}
-                onPress={() => {
-                  navigation.navigate("UserPage", { userData: user });
-                }}
-              >
-                <Image
-                  source={{ uri: user.avatar_url }}
-                  style={{ width: 130, height: 130, borderRadius: 65 }}
-                />
-                <UserInfo>
-                  <UserInfoText>Name: {user.name}</UserInfoText>
-                  <UserInfoText>Login: {user.login}</UserInfoText>
-                  <UserInfoText>Location: {user.location}</UserInfoText>
-                </UserInfo>
-              </UserResult>
-            );
-          })}
-        </RecentSearchesContainer>
+        <SearchView
+          inputRef={inputRef}
+          username={username}
+          setUsername={setUsername}
+          setUserData={setUserData}
+          handleSearch={handleSearch}
+        />
+        <ResultView>{generateResultContent()}</ResultView>
+        <RecentSearchesSection recentSearches={recentSearches} navigation={navigation} />
       </Container>
     </ScrollView>
   );
@@ -209,29 +173,6 @@ const Title = styled.Text`
   margin-bottom: 20px;
 `;
 
-const SearchView = styled.View`
-  flex-direction: row;
-  gap: 10px;
-`;
-
-const Input = styled.TextInput`
-  flex: 1;
-  height: 50px;
-  padding: 12px 15px;
-  border-radius: 5px;
-  font-size: 16px;
-  color: #333;
-  background-color: #fff;
-`;
-
-const SearchButton = styled.TouchableOpacity`
-  width: 50px;
-  background-color: #000;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-`;
-
 const ResultView = styled.View`
   width: 100%;
   height: 300px;
@@ -240,38 +181,12 @@ const ResultView = styled.View`
   margin-bottom: 25px;
 `;
 
-const UserResult = styled.TouchableOpacity`
-  width: 80%;
-  background-color: #fff;
-  border-radius: 5px;
-  flex-direction: column;
-  padding: 15px;
-  align-items: center;
-`;
-
 const FindUsersText = styled.Text`
   font-size: 15px;
 `
-
-const UserInfo = styled.View`
-  width: 100%;
-  margin-top: 20px;
-`;
 
 const ErrorMessage = styled.Text`
   font-size: 18px;
   text-align: center;
   margin-top: 20px;
-`;
-
-const UserInfoText = styled.Text`
-  font-size: 19px;
-`;
-
-const RecentSearchesContainer = styled.View`
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
 `;

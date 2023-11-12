@@ -1,16 +1,7 @@
 import React from "react";
 import { Linking } from "react-native";
 import styled from "styled-components/native";
-
-interface UserRepo {
-  id: number;
-  name: string;
-  description: string | null;
-  language: string | null;
-  html_url: string;
-  created_at: string | null;
-  pushed_at: string | null;
-}
+import { UserRepo } from "../types";
 
 export default function Repository({ data }: { data: UserRepo }) {
   const formatDate = (dateString: string | null): string => {
