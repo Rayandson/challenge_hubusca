@@ -9,10 +9,18 @@ const saveRecentSearch = async (user: UserData) => {
       if (recentSearchesString) {
         recentSearches = JSON.parse(recentSearchesString);
       }
+      
+      const userAlreadyExists = recentSearches.find((element) => element.login === user.login); 
   
-      recentSearches && recentSearches.unshift(user);
-  
-      await AsyncStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+      if (!userAlreadyExists) {
+        if (recentSearches.length >= 10) {
+          recentSearches.pop();
+        }
+        
+        recentSearches.unshift(user);
+        
+        await AsyncStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+      }
     } catch (error) {
       console.error('Error saving recent search:', error);
     }
