@@ -16,10 +16,6 @@ const saveRecentSearch = async (user: UserData) => {
       recentSearches.splice(existingIndex, 1);
     }
 
-    if (recentSearches.length >= 10) {
-      recentSearches.pop();
-    }
-
     recentSearches.unshift(user);
 
     await AsyncStorage.setItem("recentSearches", JSON.stringify(recentSearches));

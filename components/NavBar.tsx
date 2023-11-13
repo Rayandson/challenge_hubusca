@@ -3,16 +3,16 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components/native';
 
 interface NavBarProps {
-    username: string;
+    title: string;
     goBack: () => void;
 }
-export default function NavBar({username, goBack}: NavBarProps) {
+export default function NavBar({title, goBack}: NavBarProps) {
   return (
     <NavBarContainer>
         <BackButton onPress={goBack}>
           <Icon name="arrow-back" size={25} color="#333" />
         </BackButton>
-        <NavBarTitle>{username}</NavBarTitle>
+        <NavBarTitle>{title}</NavBarTitle>
       </NavBarContainer>
   )
 }

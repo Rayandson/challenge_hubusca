@@ -16,12 +16,18 @@ export default function RecentSearchesSection({
   recentSearches,
   navigation,
 }: Props) {
+
   return (
     <>
+      <TitleView>
       <Title>Pesquisas recentes</Title>
+      <SeeAll  onPress={() => {
+                navigation.navigate("RecentSearchesPage", { recentSearches: recentSearches });
+              }}><SeeAllText>Ver todos</SeeAllText></SeeAll>
+      </TitleView>
       <RecentSearchesContainer>
         <FlatList
-          data={recentSearches}
+          data={recentSearches.slice(0, 6)}
           keyExtractor={(item) => item.id.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -30,7 +36,7 @@ export default function RecentSearchesSection({
               onPress={() => {
                 navigation.navigate("UserPage", { userData: item });
               }}
-              style={{ marginLeft: index === 0 ? 20 : 0 }} // Add marginLeft only for the first item
+              style={{ marginLeft: index === 0 ? 20 : 0 }}
             >
               <Image
                 source={{ uri: item.avatar_url }}
@@ -54,12 +60,31 @@ export default function RecentSearchesSection({
   );
 }
 
-const Title = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+const TitleView = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
   margin-left: 20px;
+  margin-right: 20px;
+`
+
+const Title = styled.Text`
+  font-size: 22.5px;
+  font-weight: bold;
+  color: #333;
+`;
+
+const SeeAll = styled.TouchableOpacity`
+  font-size: 17.5px;
+  font-weight: 600;
+  color: #333;
+`;
+
+const SeeAllText = styled.Text`
+  font-size: 17.5px;
+  font-weight: 600;
+  color: #333;
 `;
 
 const RecentSearchesContainer = styled.View`

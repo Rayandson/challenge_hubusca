@@ -71,7 +71,7 @@ export default function UserPage({
 
   return (
     <>
-      <NavBar username={userData.name} goBack={goBack} />
+      <NavBar title={userData.name} goBack={goBack} />
       <ScrollView>
         <Container>
           <Content>

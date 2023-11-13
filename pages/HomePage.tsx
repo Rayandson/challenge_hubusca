@@ -20,9 +20,19 @@ import SearchView from "../components/SearchView";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
 
-type Props = {
+interface Props {
   navigation: HomeScreenNavigationProp;
-};
+}
+
+interface ResultContentProps {
+  isLoading: boolean;
+  error: string | null;
+  navigation: HomeScreenNavigationProp;
+  userData: UserData | null;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+  setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
+  inputRef: React.RefObject<TextInput>;
+}
 
 export default function HomePage({ navigation }: Props) {
   const [username, setUsername] = useState("");
@@ -110,35 +120,10 @@ export default function HomePage({ navigation }: Props) {
   };
 
   const handleSearch = () => {
+    if (!username) return;
+
     fetchUserData();
     Keyboard.dismiss();
-  };
-
-  const generateResultContent = () => {
-    if (isLoading) {
-      return <ActivityIndicator size="large" color="#333" />;
-    } else if (error) {
-      return <ErrorMessage>{error}</ErrorMessage>;
-    } else if (userData) {
-      return (
-        <UserCard
-          navigation={navigation}
-          userData={userData}
-          setUsername={setUsername}
-          setUserData={setUserData}
-        />
-      );
-    } else {
-      return (
-        <ResultPlaceholder onPress={() => inputRef.current?.focus()}>
-          <IonIcon name="logo-github" size={45} color="#000" />
-          <FindUsersText>
-            Encontre usuários do GitHub{" "}
-            <Icon name="search" size={15} color="#000" />
-          </FindUsersText>
-        </ResultPlaceholder>
-      );
-    }
   };
 
   return (
@@ -154,7 +139,17 @@ export default function HomePage({ navigation }: Props) {
               setUserData={setUserData}
               handleSearch={handleSearch}
             />
-            <ResultView>{generateResultContent()}</ResultView>
+            <ResultView>
+              <ResultContent
+                isLoading={isLoading}
+                error={error}
+                userData={userData}
+                setUserData={setUserData}
+                setUsername={setUsername}
+                navigation={navigation}
+                inputRef={inputRef}
+              />
+            </ResultView>
           </SearchSection>
           <RecentSearchesSection
             recentSearches={recentSearches}
@@ -164,6 +159,41 @@ export default function HomePage({ navigation }: Props) {
       </Container>
     </ScrollView>
   );
+}
+
+function ResultContent({
+  isLoading,
+  error,
+  userData,
+  navigation,
+  setUsername,
+  setUserData,
+  inputRef,
+}: ResultContentProps) {
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#333" />;
+  } else if (error) {
+    return <ErrorMessage>{error}</ErrorMessage>;
+  } else if (userData) {
+    return (
+      <UserCard
+        navigation={navigation}
+        userData={userData}
+        setUsername={setUsername}
+        setUserData={setUserData}
+      />
+    );
+  } else {
+    return (
+      <ResultPlaceholder onPress={() => inputRef.current?.focus()}>
+        <IonIcon name="logo-github" size={45} color="#000" />
+        <FindUsersText>
+          Encontre usuários do GitHub{" "}
+          <Icon name="search" size={15} color="#000" />
+        </FindUsersText>
+      </ResultPlaceholder>
+    );
+  }
 }
 
 const Container = styled.View`

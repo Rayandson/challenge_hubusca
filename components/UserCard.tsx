@@ -13,6 +13,7 @@ interface UserCardProps {
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
 }
+
 export default function UserCard({
   navigation,
   userData,
