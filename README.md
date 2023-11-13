@@ -11,13 +11,13 @@ Hubusca é um app que permite, de forma fácil, buscar usuários do github e con
 1. **Clone o repositório para sua máquina local:**
 
     ```bash
-    git clone https://github.com/Rayandson/challenge_hubusca.git
+    git clone https://github.com/Rayandson/hubusca.git
     ```
 
 2. **Navegue até o diretório do projeto:**
 
     ```bash
-    cd challenge_hubusca
+    cd hubusca
     ```
 
 3. **Instale as dependências do projeto:**
