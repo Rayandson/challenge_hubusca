@@ -1,6 +1,6 @@
 ﻿# Hubusca
  <p align="center">
-     <img width="220" src="assets/to_readme/hubusca_demo.gif"/>
+     <img width="250" src="assets/to_readme/hubusca_demo.gif"/>
  </p>
 
  ## Descrição
