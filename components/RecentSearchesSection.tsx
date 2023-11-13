@@ -1,51 +1,63 @@
-import React from 'react'
-import styled from 'styled-components/native';
+import React from "react";
+import styled from "styled-components/native";
+import { FlatList, Image } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList, UserData } from "../types";
-import { Image } from 'react-native';
+import Icon from "react-native-vector-icons/MaterialIcons";
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList,"Home">;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
 
 interface Props {
-    recentSearches: UserData[], 
-    navigation: HomeScreenNavigationProp
+  recentSearches: UserData[];
+  navigation: HomeScreenNavigationProp;
 }
 
-export default function RecentSearchesSection({recentSearches, navigation}: Props) {
+export default function RecentSearchesSection({
+  recentSearches,
+  navigation,
+}: Props) {
   return (
     <>
-    <Title>Pesquisas recentes</Title>
-        <RecentSearchesContainer>
-          {recentSearches.map((user: UserData) => {
-            return (
-              <UserResult
-                key={user.id}
-                onPress={() => {
-                  navigation.navigate("UserPage", { userData: user });
-                }}
-              >
-                <Image
-                  source={{ uri: user.avatar_url }}
-                  style={{ width: 130, height: 130, borderRadius: 65 }}
-                />
-                <UserInfo>
-                  <UserInfoText>Name: {user.name}</UserInfoText>
-                  <UserInfoText>Login: {user.login}</UserInfoText>
-                  <UserInfoText>Location: {user.location}</UserInfoText>
-                </UserInfo>
-              </UserResult>
-            );
-          })}
-        </RecentSearchesContainer>
+      <Title>Pesquisas recentes</Title>
+      <RecentSearchesContainer>
+        <FlatList
+          data={recentSearches}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <UserResult
+              onPress={() => {
+                navigation.navigate("UserPage", { userData: item });
+              }}
+            >
+              <Image
+                source={{ uri: item.avatar_url }}
+                style={{ width: 130, height: 130, borderRadius: 65 }}
+              />
+              <UserInfo>
+                {item.name && <Name>{item.name}</Name>}
+                <UserInfoText>{item.login}</UserInfoText>
+                {item.location && (
+                  <Location>
+                    <Icon name="place" size={18} color="#665" />
+                    <LocationText> {item.location}</LocationText>
+                  </Location>
+                )}
+              </UserInfo>
+            </UserResult>
+          )}
+        />
+      </RecentSearchesContainer>
     </>
-  )
+  );
 }
 
 const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 `;
 
 const RecentSearchesContainer = styled.View`
@@ -53,23 +65,42 @@ const RecentSearchesContainer = styled.View`
   gap: 10px;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 8px;
+  margin-bottom: 20px;
 `;
 
 const UserResult = styled.TouchableOpacity`
-  width: 80%;
+  width: 280px;
   background-color: #fff;
   border-radius: 5px;
   flex-direction: column;
   padding: 15px;
   align-items: center;
+  margin-right: 15px;
 `;
 
 const UserInfo = styled.View`
   width: 100%;
   margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Name = styled.Text`
+  font-size: 18px;
+  font-weight: 700;
 `;
 
 const UserInfoText = styled.Text`
-  font-size: 19px;
+  font-size: 17px;
+`;
+
+const Location = styled.View`
+  flex-direction: row;
+  margin-top: 10px;
+`;
+
+const LocationText = styled.Text`
+  font-size: 16px;
+  line-height: 19px;
 `;

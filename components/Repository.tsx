@@ -42,7 +42,7 @@ const Container = styled.View`
   background-color: #fff;
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border-radius: 5px;
 `;
 

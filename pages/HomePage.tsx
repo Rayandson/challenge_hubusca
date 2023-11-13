@@ -9,6 +9,7 @@ import {
 import styled from "styled-components/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import IonIcon from "react-native-vector-icons/Ionicons";
 import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList, UserData } from "../types";
@@ -114,6 +115,7 @@ export default function HomePage({ navigation }: Props) {
 
   const handleSearch = () => {
     fetchUserData();
+    Keyboard.dismiss();
   };
 
   const generateResultContent = () => {
@@ -132,12 +134,13 @@ export default function HomePage({ navigation }: Props) {
       );
     } else {
       return (
-        <TouchableOpacity onPress={() => inputRef.current?.focus()}>
+        <ResultPlaceholder onPress={() => inputRef.current?.focus()}>
+          <IonIcon name="logo-github" size={45} color="#000" />
           <FindUsersText>
             Encontre usuários do GitHub{" "}
             <Icon name="search" size={15} color="#000" />
           </FindUsersText>
-        </TouchableOpacity>
+        </ResultPlaceholder>
       );
     }
   };
@@ -180,6 +183,12 @@ const ResultView = styled.View`
   justify-content: center;
   margin-bottom: 25px;
 `;
+
+const ResultPlaceholder = styled.TouchableOpacity`
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+`
 
 const FindUsersText = styled.Text`
   font-size: 15px;
