@@ -1,4 +1,9 @@
 ﻿# Hubusca
+ <p align="center">
+     <img width="280" src="assets/to_readme/hubusca_demo.gif"/>
+ </p>
+
+ ## Descrição
 Hubusca é um app que permite, de forma fácil, buscar usuários do github e consultar os seus repositórios públicos.
 
 ## Configuração do Projeto
