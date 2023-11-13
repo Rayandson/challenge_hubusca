@@ -4,7 +4,7 @@
  </p>
 
  ## Descrição
-Hubusca é um app que permite, de forma fácil, buscar usuários do github e consultar os seus repositórios públicos.
+Hubusca é um app que permite, de forma fácil, buscar usuários do github e consultar os seus repositórios, além de salvar as pesquisas recentes.
 
 ## Configuração do Projeto
 
