@@ -74,6 +74,7 @@ export default function UserPage({
       <NavBar username={userData.name} goBack={goBack} />
       <ScrollView>
         <Container>
+          <Content>
           {userData && (
             <>
             <ProfileCard userData={userData}/>
@@ -91,6 +92,7 @@ export default function UserPage({
               )}
             </>
           )}
+          </Content>
         </Container>
       </ScrollView>
     </>
@@ -99,8 +101,13 @@ export default function UserPage({
 
 const Container = styled.View`
   flex: 1;
-  background-color: #f0f0f0;
+  background-color: #FFF;
+`;
+
+const Content = styled.View`
   padding: 10px 10px;
+  background-color: #f0f0f0;
+  max-width: 700px;
 `;
 
 const Title = styled.Text`

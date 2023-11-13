@@ -19,6 +19,7 @@ export default function NavBar({username, goBack}: NavBarProps) {
 
 const NavBarContainer = styled.View`
   width: 100%;
+  max-width: 700px;
   height: 60px;
   position: fixed;
   top: 0;

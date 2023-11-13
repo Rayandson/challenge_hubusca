@@ -18,10 +18,7 @@ import RecentSearchesSection from "../components/RecentSearchesSection";
 import UserCard from "../components/UserCard";
 import SearchView from "../components/SearchView";
 
-type HomeScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "Home"
->;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
 
 type Props = {
   navigation: HomeScreenNavigationProp;
@@ -47,7 +44,6 @@ export default function HomePage({ navigation }: Props) {
   const fetchUserData = async () => {
     setIsLoading(true);
     try {
-      
       const response = await axios.get(
         `https://api.github.com/users/${username}`
       );
@@ -144,20 +140,27 @@ export default function HomePage({ navigation }: Props) {
       );
     }
   };
-  
+
   return (
     <ScrollView keyboardShouldPersistTaps="handled" onScroll={Keyboard.dismiss}>
       <Container>
-        <Title>HUBusca</Title>
-        <SearchView
-          inputRef={inputRef}
-          username={username}
-          setUsername={setUsername}
-          setUserData={setUserData}
-          handleSearch={handleSearch}
-        />
-        <ResultView>{generateResultContent()}</ResultView>
-        <RecentSearchesSection recentSearches={recentSearches} navigation={navigation} />
+        <Content>
+          <SearchSection>
+            <Title>HUBusca</Title>
+            <SearchView
+              inputRef={inputRef}
+              username={username}
+              setUsername={setUsername}
+              setUserData={setUserData}
+              handleSearch={handleSearch}
+            />
+            <ResultView>{generateResultContent()}</ResultView>
+          </SearchSection>
+          <RecentSearchesSection
+            recentSearches={recentSearches}
+            navigation={navigation}
+          />
+        </Content>
       </Container>
     </ScrollView>
   );
@@ -165,8 +168,19 @@ export default function HomePage({ navigation }: Props) {
 
 const Container = styled.View`
   flex: 1;
+  background-color: #fff;
+`;
+
+const Content = styled.View`
+  padding-top: ${40 + getStatusBarHeight(true)}px;
+  padding-bottom: 40px;
   background-color: #f0f0f0;
-  padding: ${40 + getStatusBarHeight(true)}px 20px;
+  max-width: 700px;
+`;
+
+const SearchSection = styled.View`
+  flex: 1;
+  padding: 0 20px;
 `;
 
 const Title = styled.Text`
@@ -188,11 +202,11 @@ const ResultPlaceholder = styled.TouchableOpacity`
   flex-direction: column;
   align-items: center;
   gap: 8px;
-`
+`;
 
 const FindUsersText = styled.Text`
   font-size: 15px;
-`
+`;
 
 const ErrorMessage = styled.Text`
   font-size: 18px;

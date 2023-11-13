@@ -25,11 +25,12 @@ export default function RecentSearchesSection({
           keyExtractor={(item) => item.id.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <UserResult
               onPress={() => {
                 navigation.navigate("UserPage", { userData: item });
               }}
+              style={{ marginLeft: index === 0 ? 20 : 0 }} // Add marginLeft only for the first item
             >
               <Image
                 source={{ uri: item.avatar_url }}
@@ -58,6 +59,7 @@ const Title = styled.Text`
   font-weight: bold;
   color: #333;
   margin-bottom: 16px;
+  margin-left: 20px;
 `;
 
 const RecentSearchesContainer = styled.View`
@@ -67,6 +69,7 @@ const RecentSearchesContainer = styled.View`
   justify-content: center;
   margin-top: 8px;
   margin-bottom: 20px;
+  
 `;
 
 const UserResult = styled.TouchableOpacity`
